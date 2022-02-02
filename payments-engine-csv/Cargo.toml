@@ -1,0 +1,27 @@
+[package]
+name = "payments-engine-csv"
+authors = ["Roberto Huertas <roberto.huertas@outlook.com>"]
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+# main dependencies
+payments-engine-core = { path = "../payments-engine-core" }
+# async
+tokio = { version = "1", features = ["full"] }
+tokio-stream ={ version = "0.1", features = ["io-util"] }
+futures = "0.3"
+# observability
+tracing = "0.1"
+tracing-futures = "0.2.5"
+# serialization
+serde = "1.0"
+csv-async = { version = "1.2", features = ["tokio"] }
+# errors
+anyhow = "1.0"
+
+[dev-dependencies]
+rust_decimal = "1.21"

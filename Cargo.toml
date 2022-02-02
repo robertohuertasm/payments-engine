@@ -1,0 +1,8 @@
+[workspace]
+members = [
+    "payments-engine",
+    "payments-engine-cli",
+    "payments-engine-core",
+    "payments-engine-csv",
+    "payments-engine-store-memory",
+]

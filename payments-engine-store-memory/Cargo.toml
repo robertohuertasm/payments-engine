@@ -1,0 +1,25 @@
+[package]
+name = "payments-engine-store-memory"
+authors = ["Roberto Huertas <roberto.huertas@outlook.com>"]
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[features]
+testing = []
+
+[dependencies]
+payments-engine-core = { path = "../payments-engine-core" }
+# observability
+tracing = "0.1"
+tracing-futures = "0.2.5"
+# utils
+futures = "0.3"
+serde = {version = "1.0", features = ["derive"] }
+async-trait = "0.1"
+
+[dev-dependencies]
+tokio = { version = "1", features = ["macros", "rt"] }
+rust_decimal = { version = "1.21", features = ["serde-str"] }
