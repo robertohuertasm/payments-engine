@@ -1,7 +1,3 @@
-mod memory_store;
-
-pub use memory_store::MemoryStore;
-
 use crate::{
     account::Account,
     common::ClientId,
