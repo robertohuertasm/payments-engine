@@ -95,4 +95,4 @@ That being said, according to the specs, the CLI ignores the serde errors and pr
 - In order to keep the decimal precision up to four places past the decimal and avoid possible rounding issues I decided to use the [`rust_decimal`](https://docs.rs/rust_decimal/latest/rust_decimal/) crate.
 - I tried to favour static vs dynamic dispatch as much as possible where it made sense.
 - The different crates are comprehensively documented in order to help both end-users and developers alike. This improves maintainability and helps people to reason about different functions and design decisions.
-
+- I used several tools while developing like [clippy](https://github.com/rust-lang/rust-clippy), [cargo-make](https://github.com/sagiegurari/cargo-make) and [cargo-watch](https://github.com/watchexec/cargo-watch).
