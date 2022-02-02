@@ -21,6 +21,7 @@ pub enum StoreError {
 
 pub type StoreResult<T> = Result<T, StoreError>;
 
+/// The [`Store`] traits is an abstraction over the storage of the transactions and accounts.
 #[async_trait]
 pub trait Store: Send + Sync {
     /// Gets a [`Transaction`] by its id.
