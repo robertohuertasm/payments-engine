@@ -96,3 +96,4 @@ That being said, according to the specs, the CLI ignores the serde errors and pr
 - I tried to favour static vs dynamic dispatch as much as possible where it made sense.
 - The different crates are comprehensively documented in order to help both end-users and developers alike. This improves maintainability and helps people to reason about different functions and design decisions.
 - I used several tools while developing like [clippy](https://github.com/rust-lang/rust-clippy), [cargo-make](https://github.com/sagiegurari/cargo-make) and [cargo-watch](https://github.com/watchexec/cargo-watch).
+- The order of the rows in the output CSV file is not guaranteed.
