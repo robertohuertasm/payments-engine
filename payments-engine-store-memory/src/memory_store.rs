@@ -156,12 +156,12 @@ impl Inner {
     }
 
     #[cfg(any(test, feature = "testing"))]
-    pub fn deposits(&self) -> &RwLock<HashMap<TransactionId, Transaction>> {
+    pub const fn deposits(&self) -> &RwLock<HashMap<TransactionId, Transaction>> {
         &self.deposits
     }
 
     #[cfg(any(test, feature = "testing"))]
-    pub fn accounts(&self) -> &RwLock<HashMap<ClientId, Account>> {
+    pub const fn accounts(&self) -> &RwLock<HashMap<ClientId, Account>> {
         &self.accounts
     }
 
