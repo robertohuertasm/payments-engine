@@ -102,9 +102,7 @@ impl<S: Store> CoreEngine for Engine<S> {
                                 "Rolling back transaction dispute state for tx {}",
                                 transaction_info.id
                             );
-                            self.store
-                                .set_transaction_under_dispute(transaction_info.id, false)
-                                .await?;
+                            self.store.toggle_under_dispute(transaction_info.id).await?;
                         }
                     }
                 };
@@ -949,9 +947,14 @@ mod tests {
         store.set_enable_upsert_account_failure(true);
 
         let engine = Engine::new(store.clone());
+
+        // test dispute rollback
         let dispute = Transaction::dispute(1, 1);
 
-        let err = engine.process_transaction(dispute).await.unwrap_err();
+        let err = engine
+            .process_transaction(dispute.clone())
+            .await
+            .unwrap_err();
 
         assert_eq!(
             err,
@@ -963,5 +966,51 @@ mod tests {
         assert_eq!(account.total, dec!(10));
 
         assert_under_dispute(&store, 1, false);
+
+        // test resolve rollback
+        store.set_enable_upsert_account_failure(false);
+
+        let account = engine.process_transaction(dispute).await.unwrap();
+
+        assert_eq!(account.available, Amount::ZERO);
+        assert_eq!(account.held, dec!(10));
+        assert_eq!(account.total, dec!(10));
+
+        assert_under_dispute(&store, 1, true);
+
+        store.set_enable_upsert_account_failure(true);
+
+        let err = engine
+            .process_transaction(Transaction::resolve(1, 1))
+            .await
+            .unwrap_err();
+
+        assert_eq!(
+            err,
+            EngineError::TransactionNotCommited(StoreError::AccessError("Test Error".to_string()))
+        );
+
+        assert_eq!(account.available, Amount::ZERO);
+        assert_eq!(account.held, dec!(10));
+        assert_eq!(account.total, dec!(10));
+
+        assert_under_dispute(&store, 1, true);
+
+        // test chargeback rollback
+        let err = engine
+            .process_transaction(Transaction::chargeback(1, 1))
+            .await
+            .unwrap_err();
+
+        assert_eq!(
+            err,
+            EngineError::TransactionNotCommited(StoreError::AccessError("Test Error".to_string()))
+        );
+
+        assert_eq!(account.available, Amount::ZERO);
+        assert_eq!(account.held, dec!(10));
+        assert_eq!(account.total, dec!(10));
+
+        assert_under_dispute(&store, 1, true);
     }
 }
