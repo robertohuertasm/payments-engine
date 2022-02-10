@@ -8,6 +8,7 @@ use payments_engine_core::{
 use std::{
     collections::HashMap,
     ops::Deref,
+    pin::Pin,
     sync::{Arc, RwLock},
 };
 use tracing::instrument;
@@ -120,7 +121,7 @@ impl Store for MemoryStore {
     #[instrument(skip(self))]
     async fn get_all_accounts(
         &self,
-    ) -> StoreResult<Box<dyn futures::Stream<Item = Account> + Unpin + Send>> {
+    ) -> StoreResult<Pin<Box<dyn futures::Stream<Item = Account> + Send>>> {
         self.0.get_all_accounts().await
     }
 }
@@ -376,13 +377,13 @@ impl Store for Inner {
     #[instrument(skip(self))]
     async fn get_all_accounts(
         &self,
-    ) -> StoreResult<Box<dyn futures::Stream<Item = Account> + Unpin + Send>> {
+    ) -> StoreResult<Pin<Box<dyn futures::Stream<Item = Account> + Send>>> {
         let result = self
             .accounts
             .read()
             .map_err(|e| StoreError::AccessError(e.to_string()))
             .map(|accounts| {
-                Box::new(futures::stream::iter(
+                Box::pin(futures::stream::iter(
                     accounts.values().cloned().collect::<Vec<_>>(),
                 ))
             })?;

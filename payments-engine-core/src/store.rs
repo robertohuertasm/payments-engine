@@ -4,6 +4,7 @@ use crate::{
     transaction::{Transaction, TransactionId},
 };
 use async_trait::async_trait;
+use std::pin::Pin;
 use thiserror::Error;
 
 /// Error type for [`Store`] implementations.
@@ -50,5 +51,5 @@ pub trait Store: Send + Sync {
     /// Returns the current balance of all the clients [`Account`].
     async fn get_all_accounts(
         &self,
-    ) -> StoreResult<Box<dyn futures::Stream<Item = Account> + Unpin + Send>>;
+    ) -> StoreResult<Pin<Box<dyn futures::Stream<Item = Account> + Send>>>;
 }

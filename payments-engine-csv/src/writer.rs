@@ -8,7 +8,7 @@ pub type AsyncWriter = dyn tokio::io::AsyncWrite + Send + Sync + Unpin;
 #[instrument(skip(writer, account_stream))]
 pub async fn write_csv_async(
     writer: &mut AsyncWriter,
-    mut account_stream: impl futures::Stream<Item = Account> + Unpin + Send,
+    mut account_stream: impl futures::Stream<Item = Account> + Send + Unpin,
 ) -> anyhow::Result<()> {
     let mut writer = csv_async::AsyncSerializer::from_writer(writer);
 

@@ -6,6 +6,7 @@ use payments_engine_core::{
     store::{Store, StoreError},
     transaction::{Transaction, TransactionInfo},
 };
+use std::pin::Pin;
 use tracing::instrument;
 /// The [`Engine`] is responsible for processing all the transactions.
 /// It also provides a way to get the current state of all the accounts.
@@ -114,9 +115,7 @@ impl<S: Store> CoreEngine for Engine<S> {
 
     /// Returns the current state of clients accounts.
     #[instrument(skip(self))]
-    async fn report(
-        &self,
-    ) -> EngineResult<Box<dyn futures::Stream<Item = Account> + Unpin + Send>> {
+    async fn report(&self) -> EngineResult<Pin<Box<dyn futures::Stream<Item = Account> + Send>>> {
         let stream = self.store.get_all_accounts().await?;
         Ok(stream)
     }

@@ -5,6 +5,7 @@ use crate::{
     transaction::{Transaction, TransactionId},
 };
 use async_trait::async_trait;
+use std::pin::Pin;
 use thiserror::Error;
 
 /// The [`Engine`] is responsible for processing all the transactions.
@@ -14,8 +15,7 @@ pub trait Engine: Send + Sync {
     /// Process a single transaction.
     async fn process_transaction(&self, transaction: Transaction) -> EngineResult<Account>;
     /// Get the current state of all the accounts.
-    async fn report(&self)
-        -> EngineResult<Box<dyn futures::Stream<Item = Account> + Unpin + Send>>;
+    async fn report(&self) -> EngineResult<Pin<Box<dyn futures::Stream<Item = Account> + Send>>>;
 }
 
 /// Result for [`Engine`] operations.
